@@ -5,8 +5,7 @@ import joblib
 
 st.set_page_config(page_title="Fraud Detection App", layout="wide")
 
-model_path = os.path.join(os.path.dirname(__file__), "fraud_model.pkl")
-model = joblib.load(model_path)
+model = joblib.load("models/best_fraud_model.pkl")
 
 st.title("Online Transaction Fraud Detection")
 st.write("Predict whether a transaction is fraudulent or genuine.")
