@@ -1,0 +1,12 @@
+numpy
+pandas
+matplotlib
+seaborn
+scikit-learn
+logistic regression
+random forest 
+xgboost
+lightbgm
+jupyter
+imbalanced-learn
+shap
