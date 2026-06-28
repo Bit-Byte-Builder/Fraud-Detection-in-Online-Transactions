@@ -44,6 +44,26 @@ Fraud-Detection-in-Online-Transactions/
 6. Model Evaluation
 7. Business Recommendations
 
+## Model Performance
+
+**Recommended Model:** Logistic Regression
+
+| Metric | Value |
+|--------|------:|
+| Accuracy | 69.57% |
+| Precision | 18.65% |
+| Recall | 60.24% |
+| F1-Score | 28.48% |
+| ROC-AUC | 70.73% |
+| PR-AUC | 22.24% |
+
+## Threshold Optimization
+- **Optimal Threshold:** 0.6109
+- **F1-Score (After Threshold Tuning):** 30.38%
+- **Accuracy (After Threshold Tuning):** 81.35%
+
+> > **Note:** The decision threshold was optimized to improve fraud detection performance while balancing precision and recall.
+
 ## Dataset
 The dataset contains transaction-level information used to classify fraudulent and legitimate online transactions.
 
