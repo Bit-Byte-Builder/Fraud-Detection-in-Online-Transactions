@@ -5,7 +5,10 @@ import joblib
 
 st.set_page_config(page_title="Fraud Detection App", layout="wide")
 
-MODEL_PATH = "fraud_model.pkl"
+MODEL_PATH = "models/best_fraud_model.pkl"
+FEATURE_NAMES_PATH = "models/feature_names.pkl"
+SCALER_PATH = "models/scaler.pkl"
+METADATA_PATH = "models/model_metadeta.pkl"
 
 EXPECTED_COLUMNS = [
     'amount',
