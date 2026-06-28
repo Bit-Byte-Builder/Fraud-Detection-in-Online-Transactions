@@ -1,11 +1,17 @@
-import streamlit as st
-import pandas as pd
 import os
 import joblib
+import pandas as pd
+import streamlit as st
 
-st.set_page_config(page_title="Fraud Detection App", layout="wide")
+BASE_DIR = os.path.dirname(__file__)
 
-model = joblib.load("models/best_fraud_model.pkl")
+model = joblib.load(os.path.join(BASE_DIR, "models", "best_fraud_model.pkl"))
+scaler = joblib.load(os.path.join(BASE_DIR, "models", "scaler.pkl"))
+feature_names = joblib.load(os.path.join(BASE_DIR, "models", "feature_names.pkl"))
+metadata = joblib.load(os.path.join(BASE_DIR, "models", "model_metadata.pkl"))
+
+st.write("Input columns:", list(input_df.columns))
+st.write("Expected features:", feature_names)
 
 st.title("Online Transaction Fraud Detection")
 st.write("Predict whether a transaction is fraudulent or genuine.")
