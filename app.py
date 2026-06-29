@@ -1,155 +1,125 @@
 import streamlit as st
 import pandas as pd
 import joblib
-import os
+
+# ----------------------------
+# Load trained pipeline
+# ----------------------------
+model = joblib.load("models/fraud_pipeline.pkl")
 
 st.set_page_config(
-    page_title="Online Transaction Fraud Detection",
+    page_title="Fraud Detection System",
     page_icon="💳",
-    layout="centered"
+    layout="wide"
 )
 
-st.title("💳 Online Transaction Fraud Detection")
-st.write("Predict whether an online transaction is fraudulent.")
+st.title("💳 Credit Card Fraud Detection")
+st.write("Predict whether a transaction is fraudulent.")
 
-# Load model
-MODEL_PATH = "models/fraud_pipeline.pkl"
+# ----------------------------
+# Sidebar Inputs
+# ----------------------------
+st.sidebar.header("Transaction Details")
 
-if not os.path.exists(MODEL_PATH):
-    st.error("Model file not found!")
-    st.stop()
-
-model = joblib.load(MODEL_PATH)
-
-st.header("Transaction Details")
-
-customerid = st.number_input("Customer ID", value=1000)
-deviceid = st.number_input("Device ID", value=20000)
-merchantid = st.number_input("Merchant ID", value=500)
-
-merchantcategory = st.selectbox(
-    "Merchant Category",
-    [
-        "Electronics",
-        "Fashion",
-        "Grocery",
-        "Travel",
-        "Food",
-        "Healthcare",
-        "Entertainment"
-    ]
-)
-
-isinternational = st.selectbox(
-    "International Transaction?",
-    [0, 1]
-)
-
-isweekend = st.selectbox(
-    "Weekend Transaction?",
-    [0, 1]
-)
-
-hourofday = st.slider(
-    "Hour of Day",
-    0,
-    23,
-    12
-)
-
-dayofweek = st.slider(
-    "Day of Week (0=Monday)",
-    0,
-    6,
-    2
-)
-
-avgamountlast24h = st.number_input(
-    "Average Amount (Last 24 Hours)",
+amount = st.sidebar.number_input(
+    "Transaction Amount",
+    min_value=0.0,
     value=1000.0
 )
 
-txncountlast24h = st.number_input(
-    "Transactions in Last 24 Hours",
-    value=5
+transaction_type = st.sidebar.selectbox(
+    "Transaction Type",
+    [
+        "UPI",
+        "Card",
+        "Net Banking",
+        "Wallet",
+        "ATM"
+    ]
 )
 
-merchanthistoricalfraudrate = st.slider(
-    "Merchant Historical Fraud Rate",
+merchant_category = st.sidebar.selectbox(
+    "Merchant Category",
+    [
+        "Retail",
+        "Grocery",
+        "Travel",
+        "Entertainment",
+        "Electronics",
+        "Food"
+    ]
+)
+
+payment_method = st.sidebar.selectbox(
+    "Payment Method",
+    [
+        "Debit Card",
+        "Credit Card",
+        "UPI",
+        "Wallet",
+        "Net Banking"
+    ]
+)
+
+device_type = st.sidebar.selectbox(
+    "Device Type",
+    [
+        "Android",
+        "iOS",
+        "Desktop"
+    ]
+)
+
+authentication = st.sidebar.selectbox(
+    "Authentication Method",
+    [
+        "PIN",
+        "OTP",
+        "Biometric"
+    ]
+)
+
+risk_score = st.sidebar.slider(
+    "Risk Score",
     0.0,
-    1.0,
-    0.05
+    100.0,
+    25.0
 )
 
-pastfraudcountcustomer = st.number_input(
-    "Past Fraud Count",
-    value=0
+hour = st.sidebar.slider("Hour of Day", 0, 23, 12)
+
+day_of_week = st.sidebar.selectbox(
+    "Day of Week",
+    [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday"
+    ]
 )
 
-pastdisputescustomer = st.number_input(
-    "Past Disputes",
-    value=0
-)
+# --------------------------------------------------
+# NOTE:
+# Replace the columns below with the exact feature
+# names used in your training notebook.
+# --------------------------------------------------
 
-devicetrustscore = st.slider(
-    "Device Trust Score",
-    0,
-    100,
-    80
-)
-
-ipaddressriskscore = st.slider(
-    "IP Address Risk Score",
-    0,
-    100,
-    20
-)
-
-otpsuccessratecustomer = st.slider(
-    "OTP Success Rate",
-    0.0,
-    1.0,
-    0.95
-)
-
-merchantdiversitylast7d = st.number_input(
-    "Merchant Diversity (Last 7 Days)",
-    value=3
-)
-
-locationchangeflag = st.selectbox(
-    "Location Changed?",
-    [0, 1]
-)
-
-devicechangeflag = st.selectbox(
-    "Device Changed?",
-    [0, 1]
-)
+input_df = pd.DataFrame({
+    "amount": [amount],
+    "transactiontype": [transaction_type],
+    "merchantcategory": [merchant_category],
+    "paymentmethod": [payment_method],
+    "devicetype": [device_type],
+    "authenticationmethod": [authentication],
+    "riskscore": [risk_score],
+    "hour": [hour],
+    "dayofweek": [day_of_week]
+})
 
 if st.button("Predict Fraud"):
-
-    input_df = pd.DataFrame([{
-        "customerid": customerid,
-        "deviceid": deviceid,
-        "merchantid": merchantid,
-        "merchantcategory": merchantcategory,
-        "isinternational": isinternational,
-        "isweekend": isweekend,
-        "hourofday": hourofday,
-        "dayofweek": dayofweek,
-        "avgamountlast24h": avgamountlast24h,
-        "txncountlast24h": txncountlast24h,
-        "merchanthistoricalfraudrate": merchanthistoricalfraudrate,
-        "pastfraudcountcustomer": pastfraudcountcustomer,
-        "pastdisputescustomer": pastdisputescustomer,
-        "devicetrustscore": devicetrustscore,
-        "ipaddressriskscore": ipaddressriskscore,
-        "otpsuccessratecustomer": otpsuccessratecustomer,
-        "merchantdiversitylast7d": merchantdiversitylast7d,
-        "locationchangeflag": locationchangeflag,
-        "devicechangeflag": devicechangeflag
-    }])
 
     prediction = model.predict(input_df)[0]
     probability = model.predict_proba(input_df)[0][1]
@@ -157,11 +127,24 @@ if st.button("Predict Fraud"):
     st.subheader("Prediction")
 
     if prediction == 1:
-        st.error("🚨 Fraudulent Transaction")
+        st.error("⚠ Fraudulent Transaction")
     else:
         st.success("✅ Genuine Transaction")
 
     st.metric(
         "Fraud Probability",
-        f"{probability*100:.2f}%"
+        f"{probability:.2%}"
     )
+
+    st.progress(float(probability))
+
+    st.subheader("Business Decision")
+
+    if probability >= 0.80:
+        st.error("🚫 Hard Block")
+    elif probability >= 0.60:
+        st.warning("📞 Soft Review")
+    elif probability >= 0.30:
+        st.info("👀 Monitor")
+    else:
+        st.success("✅ Approve")
