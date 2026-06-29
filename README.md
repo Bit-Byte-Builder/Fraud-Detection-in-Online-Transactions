@@ -1,14 +1,18 @@
 # Fraud Detection in Online Transactions
 
 ## Project Overview
-This project develops an end-to-end machine learning pipeline to detect fraudulent online financial transactions. The workflow includes data validation, exploratory data analysis (EDA), feature engineering, data preprocessing, model training, evaluation, and business recommendations for fraud mitigation.
+This project builds an end-to-end machine learning pipeline to detect fraudulent online transactions. The workflow includes data validation, exploratory data analysis, feature engineering, preprocessing, model training, threshold tuning, and business recommendations for fraud mitigation.
+
+## Business Problem
+PaySphere Digital Payments Pvt. Ltd. processes millions of transactions across UPI, cards, net banking, and wallets. The fraud team faces rising fraudulent activity, class imbalance, false negatives, and false positives, making it important to build a model that can detect fraud while keeping customer friction low.
 
 ## Objectives
-- Detect fraudulent transactions accurately
-- Reduce false positives and false negatives
-- Engineer behavioral and transaction-based features
-- Build and evaluate machine learning classification models
-- Provide actionable business insights
+- Detect fraudulent transactions accurately.
+- Reduce false positives and false negatives.
+- Engineer meaningful behavioral and transaction-based features.
+- Build and evaluate machine learning classification models.
+- Tune the fraud decision threshold for business use.
+- Provide actionable fraud risk insights.
 
 ## Tech Stack
 - Python
@@ -17,58 +21,102 @@ This project develops an end-to-end machine learning pipeline to detect fraudule
 - Matplotlib
 - Seaborn
 - Scikit-learn
-- Jupyter Notebook
-
-## Project Structure
-
-```
-Fraud-Detection-in-Online-Transactions/
-├── notebooks/
-│   └── Fraud_Detection_Capstone_Project.ipynb
-├── data/
-│   ├── raw/
-│   └── processed/
-├── images/
-├── requirements.txt
-├── README.md
-├── LICENSE
-└── .gitignore
-```
+- XGBoost
+- Imbalanced-learn
+- Joblib
+- Streamlit
 
 ## Workflow
-1. Data Validation
-2. Exploratory Data Analysis (EDA)
-3. Data Preprocessing
-4. Feature Engineering
-5. Model Training
-6. Model Evaluation
-7. Business Recommendations
+1. Data loading and schema inspection.
+2. Data validation and quality checks.
+3. Exploratory data analysis.
+4. Feature engineering.
+5. Data preprocessing.
+6. Model training.
+7. Model evaluation.
+8. Threshold tuning.
+9. Business recommendations.
+
+## Dataset
+The dataset contains 50,000 online transactions with features such as amount, payment method, international flag, merchant category, device trust score, IP risk score, OTP success rate, fraud history, disputes, and time-based patterns. The final target variable is `isfraud`.
+
+## Data Validation
+The notebook checks for missing values, duplicate transaction IDs, negative transaction amounts, invalid labels, timestamp issues, and out-of-range values. The dataset used in the project passed these validation checks.
+
+## Feature Engineering
+Several fraud-relevant features were created from the raw dataset, including:
+- Amount deviation ratio.
+- Amount deviation difference.
+- IP-device risk interaction.
+- Combined change flag.
+- Weekend-night flag.
+- Weak authentication flag.
+- High-risk payment flag.
+- Customer transaction sequence.
+- Customer-device pair count.
+- Customer-merchant pair count.
+
+These engineered features help capture behavioral anomalies and risk patterns more effectively than raw fields alone.
+
+## Model Training
+The notebook compares multiple models, including Logistic Regression and Random Forest. The final evaluation focuses on Random Forest for deeper assessment, while Logistic Regression is also reported as a benchmark model.
 
 ## Model Performance
 
-**Recommended Model:** Logistic Regression
+### Initial Model Evaluation (Default Threshold = 0.5)
+- ROC-AUC: 0.688956
+- PR-AUC: 0.198123
+- Precision (class 1): 0.22
+- Recall (class 1): 0.39
+- F1 Score (class 1): 0.28
+- Accuracy: 0.80
 
-| Metric | Value |
-|--------|------:|
-| Accuracy | 69.57% |
-| Precision | 18.65% |
-| Recall | 60.24% |
-| F1-Score | 28.48% |
-| ROC-AUC | 70.73% |
-| PR-AUC | 22.24% |
+### After Threshold Tuning
+- Best Threshold (based on F1-score): 0.55
+- Precision (class 1): 0.23
+- Recall (class 1): 0.37
+- F1 Score (class 1): 0.28
+- Accuracy: 0.81
 
-## Threshold Optimization
-- **Optimal Threshold:** 0.6109
-- **F1-Score (After Threshold Tuning):** 30.38%
-- **Accuracy (After Threshold Tuning):** 81.35%
+The tuned threshold slightly improves precision and accuracy, while recall decreases a little, showing the normal trade-off in fraud detection between catching more fraud and reducing false alerts.
 
-> > **Note:** The decision threshold was optimized to improve fraud detection performance while balancing precision and recall.
+## Saved Artifacts
+The final deployed model is saved as `models/fraudpipeline.pkl`, and the model metadata is saved as `models/modelmetadata.pkl`.
 
-## Dataset
-The dataset contains transaction-level information used to classify fraudulent and legitimate online transactions.
+## Project Structure
+```text
+Fraud-Detection-in-Online-Transactions/
+├── models/
+│   ├── fraudpipeline.pkl
+│   ├── modelmetadata.pkl
+│   ├── feature_names.pkl
+│   └── scaler.pkl
+├── app.py
+├── requirements.txt
+├── README.md
+└── notebooks/
+    └── Fraud_Detection_Capstone_Project.ipynb
+```
 
-## Results
-The trained classification model predicts fraudulent transactions based on behavioral and transactional features, supporting fraud prevention and risk management.
+## Requirements
+- numpy
+- pandas
+- matplotlib
+- seaborn
+- scikit-learn
+- xgboost
+- imbalanced-learn
+- joblib
+- streamlit
+
+## Business Insights
+- Device changes and location changes are strong fraud indicators.
+- International transactions show a higher fraud rate than domestic transactions.
+- Fraud risk increases when risky behavior combines with weak authentication.
+- Threshold tuning is useful when balancing fraud capture against false positives.
+
+## Conclusion
+This project demonstrates a complete fraud detection pipeline for online transactions, from validation and feature engineering to model evaluation and deployment. The final model and metadata are saved in the `models/` folder for Streamlit use and future scoring..
 
 ## Author
 **Sachin Kumar**
