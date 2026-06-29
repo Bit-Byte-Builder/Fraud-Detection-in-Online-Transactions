@@ -9,7 +9,7 @@ model = joblib.load(os.path.join(BASE_DIR, "models", "best_fraud_model.pkl"))
 scaler = joblib.load(os.path.join(BASE_DIR, "models", "scaler.pkl"))
 feature_names = joblib.load(os.path.join(BASE_DIR, "models", "feature_names.pkl"))
 metadata = joblib.load(os.path.join(BASE_DIR, "models", "model_metadata.pkl"))
-threshold = metadata.get("threshold", 0.5)
+threshold = metadata.get("threshold", 0.61)
 
 st.title("Fraud Detection App")
 st.write("Enter transaction details below or upload a CSV.")
