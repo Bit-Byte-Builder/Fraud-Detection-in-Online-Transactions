@@ -1,3 +1,33 @@
+# 💳 AI-Powered Financial Fraud Detection System
+
+## 🚀 Live Demo
+
+👉 **Try the deployed application:**
+https://bit-byte-builder-fraud-detection-in-online-transacti-app-2ccd8d.streamlit.app/
+
+---
+
+### ✨ Key Features
+
+- 🔍 Real-time Fraud Prediction
+- 🤖 Machine Learning Powered (Random Forest)
+- 📊 Fraud Probability Score
+- ⚠️ Risk Level Assessment
+- ✅ Business Action Recommendation
+- 📈 Interactive Streamlit Dashboard
+- 🧠 Advanced Feature Engineering
+
+- ## 🖼️ Application Preview
+
+### Home Screen
+
+
+### Prediction Dashboard
+![Prediction](screenshots/03_Prediction_Result_Low_Risk.png)
+
+### Risk Assessment
+![Risk](screenshots/08_Medium_Risk_Transaction_Result.png)
+
 # Fraud Detection in Online Transactions
 
 ## Project Overview
