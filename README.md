@@ -19,14 +19,21 @@ https://bit-byte-builder-fraud-detection-in-online-transacti-app-2ccd8d.streamli
 
 - ## 🖼️ Application Preview
 
-### Home Screen
+## 🖼️ Application Preview
+## 🖼️ Application Preview
 
+### 🏠 Home Screen
 
-### Prediction Dashboard
-![Prediction](screenshots/03_Prediction_Result_Low_Risk.png)
+![Home Screen](screenshots/01_Home_Page.png)
 
-### Risk Assessment
-![Risk](screenshots/08_Medium_Risk_Transaction_Result.png)
+### 📊 Prediction Dashboard
+
+![Prediction Dashboard](screenshots/03_Prediction_Result_Low_Risk.png)
+
+### ✅ Recommended Action
+
+![Recommended Action](screenshots/04_Approved_Transaction_Recommendation_Engineered_Features.png)
+
 
 # Fraud Detection in Online Transactions
 
