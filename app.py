@@ -2,20 +2,40 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import joblib
-import os
+from pathlib import Path
 
 st.set_page_config(page_title="Fraud Detection App", layout="wide")
 
-@st.cache_resource
-def load_artifacts():
-    pipeline = joblib.load("models/fraudpipeline.pkl")
-    metadata = joblib.load("models/modelmetadata.pkl")
-    return pipeline, metadata
+MODELS_DIR = Path("models")
+PIPELINE_PATH = MODELS_DIR / "fraudpipeline.pkl"
+METADATA_PATH = MODELS_DIR / "modelmetadata.pkl"
 
-pipeline, metadata = load_artifacts()
+def load_artifacts():
+    missing = []
+    if not MODELS_DIR.exists():
+        missing.append("models/")
+    if not PIPELINE_PATH.exists():
+        missing.append("models/fraudpipeline.pkl")
+    if not METADATA_PATH.exists():
+        missing.append("models/modelmetadata.pkl")
+    if missing:
+        return None, None, missing
+    pipeline = joblib.load(PIPELINE_PATH)
+    metadata = joblib.load(METADATA_PATH)
+    return pipeline, metadata, []
+
+pipeline, metadata, missing = load_artifacts()
 
 st.title("Fraud Detection in Online Transactions")
 st.caption("Real-time fraud risk scoring for payment transactions")
+
+if missing:
+    st.error("Required model files are missing.")
+    st.write("Missing items:")
+    for item in missing:
+        st.write(f"- {item}")
+    st.info("Create the models folder and place the trained pickle files inside it.")
+    st.stop()
 
 st.sidebar.header("Transaction Details")
 
@@ -82,7 +102,7 @@ st.dataframe(input_df, use_container_width=True)
 if st.button("Predict Fraud Risk"):
     try:
         proba = pipeline.predict_proba(input_df)[:, 1][0]
-        threshold = metadata.get("threshold", 0.61)
+        threshold = metadata.get("threshold", 0.55)
         prediction = int(proba >= threshold)
 
         col1, col2, col3 = st.columns(3)
