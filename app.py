@@ -4,7 +4,10 @@ import streamlit as st
 import pandas as pd
 
 BASE_DIR = os.path.dirname(__file__)
-pipeline = joblib.load(os.path.join(BASE_DIR, "models", "fraud_pipeline.pkl"))
+
+model = joblib.load(os.path.join(BASE_DIR, "models", "best_fraud_model.pkl"))
+scaler = joblib.load(os.path.join(BASE_DIR, "models", "scaler.pkl"))
+feature_names = joblib.load(os.path.join(BASE_DIR, "models", "feature_names.pkl"))
 metadata = joblib.load(os.path.join(BASE_DIR, "models", "model_metadata.pkl"))
 threshold = metadata.get("threshold", 0.61)
 
