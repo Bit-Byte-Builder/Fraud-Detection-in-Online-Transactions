@@ -293,10 +293,18 @@ with st.expander("Preview Model Input"):
 
 if st.button("🔍 Predict Fraud", use_container_width=True):
 
-    prediction = model.predict(input_df)[0
+    # Make prediction
+    prediction = model.predict(input_df)[0]
+
+    # Get prediction probabilities
     proba = model.predict_proba(input_df)[0]
-    fraud_index = list(model.classes_).index(1)
-    probability = proba[fraud_index]
+
+    # Probability of Fraud class
+    if 1 in model.classes_:
+        fraud_index = list(model.classes_).index(1)
+        probability = proba[fraud_index]
+    else:
+        probability = proba[0]
 
     st.divider()
 
@@ -319,9 +327,8 @@ if st.button("🔍 Predict Fraud", use_container_width=True):
     with col3:
         st.metric(
             "Model Confidence",
-            f"{max(probability,1-probability):.2%}"
+            f"{max(probability, 1 - probability):.2%}"
         )
-
     # ------------------------------------------
     # Risk Level
     # ------------------------------------------
