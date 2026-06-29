@@ -86,16 +86,14 @@ The final deployed model is saved as `models/fraudpipeline.pkl`, and the model m
 ## Project Structure
 ```text
 Fraud-Detection-in-Online-Transactions/
+├── app.py
+├── README.md
+├── requirements.txt
 ├── models/
 │   ├── fraudpipeline.pkl
-│   ├── modelmetadata.pkl
-│   ├── feature_names.pkl
-│   └── scaler.pkl
-├── app.py
-├── requirements.txt
-├── README.md
+│   └── modelmetadata.pkl
 └── notebooks/
-    └── Fraud_Detection_Capstone_Project.ipynb
+    └── Fraud_Detection_Capstone_Project-1.ipynb
 ```
 
 ## Requirements
