@@ -1,121 +1,165 @@
 import streamlit as st
 import pandas as pd
-import numpy as np
 import joblib
-from pathlib import Path
+import numpy as np
 
-st.set_page_config(page_title="Fraud Detection App", layout="wide")
+# -----------------------
+# Load model
+# -----------------------
+model = joblib.load("models/fraud_pipeline.pkl")
 
-MODELS_DIR = Path("models")
-PIPELINE_PATH = MODELS_DIR / "fraud_pipeline.pkl"
-METADATA_PATH = MODELS_DIR / "model_metadata.pkl"
+st.set_page_config(page_title="Fraud Detection System", layout="wide")
 
-def load_artifacts():
-    missing = []
-    if not MODELS_DIR.exists():
-        missing.append("models/")
-    if not PIPELINE_PATH.exists():
-        missing.append("models/fraudpipeline.pkl")
-    if not METADATA_PATH.exists():
-        missing.append("models/modelmetadata.pkl")
-    if missing:
-        return None, None, missing
-    pipeline = joblib.load(PIPELINE_PATH)
-    metadata = joblib.load(METADATA_PATH)
-    return pipeline, metadata, []
+st.title("💳 Online Transaction Fraud Detection")
+st.write("Predict whether a transaction is fraudulent.")
 
-pipeline, metadata, missing = load_artifacts()
+# -----------------------
+# User Inputs
+# -----------------------
 
-st.title("Fraud Detection in Online Transactions")
-st.caption("Real-time fraud risk scoring for payment transactions")
+amount = st.number_input("Transaction Amount", min_value=0.0, value=1000.0)
 
-if missing:
-    st.error("Required model files are missing.")
-    st.write("Missing items:")
-    for item in missing:
-        st.write(f"- {item}")
-    st.info("Create the models folder and place the trained pickle files inside it.")
-    st.stop()
+payment_method = st.selectbox(
+    "Payment Method",
+    ["UPI", "Card", "Wallet", "Net Banking"]
+)
 
-st.sidebar.header("Transaction Details")
+authentication_method = st.selectbox(
+    "Authentication",
+    ["OTP", "PIN", "Biometric", "Password"]
+)
 
-def input_float(label, value=0.0, min_value=0.0, max_value=1e9, step=0.01):
-    return st.sidebar.number_input(label, value=float(value), min_value=float(min_value), max_value=float(max_value), step=float(step))
+device_change = st.selectbox(
+    "Device Changed?",
+    ["No", "Yes"]
+)
 
-def input_int(label, value=0, min_value=0, max_value=1_000_000, step=1):
-    return st.sidebar.number_input(label, value=int(value), min_value=int(min_value), max_value=int(max_value), step=int(step))
+location_change = st.selectbox(
+    "Location Changed?",
+    ["No", "Yes"]
+)
 
-transaction_id = input_int("Transaction ID", 1)
-customer_id = input_int("Customer ID", 1000)
-device_id = input_int("Device ID", 20000)
-merchant_id = input_int("Merchant ID", 500)
+is_weekend = st.selectbox(
+    "Weekend Transaction?",
+    ["No", "Yes"]
+)
 
-amount = input_float("Amount", 1000.0, 0.0, 1000000.0, 0.01)
-is_international = st.sidebar.selectbox("International Transaction", [0, 1], format_func=lambda x: "Yes" if x == 1 else "No")
-payment_method = st.sidebar.selectbox("Payment Method", ["CARD", "UPI", "WALLET", "NETBANKING"])
-merchant_category = st.sidebar.selectbox("Merchant Category", ["Electronics", "Fashion", "Grocery", "Gaming", "Utilities", "Travel"])
-ip_address_risk_score = input_float("IP Address Risk Score", 0.2, 0.0, 1.0, 0.01)
-device_trust_score = input_float("Device Trust Score", 0.8, 0.0, 1.0, 0.01)
-txn_count_last_24h = input_int("Txn Count Last 24h", 3, 0, 1000, 1)
-avg_amount_last_24h = input_float("Avg Amount Last 24h", 900.0, 0.0, 1000000.0, 0.01)
-merchant_diversity_last_7d = input_int("Merchant Diversity Last 7d", 2, 0, 1000, 1)
-device_change_flag = st.sidebar.selectbox("Device Change Flag", [0, 1], format_func=lambda x: "Yes" if x == 1 else "No")
-location_change_flag = st.sidebar.selectbox("Location Change Flag", [0, 1], format_func=lambda x: "Yes" if x == 1 else "No")
-authentication_method = st.sidebar.selectbox("Authentication Method", ["OTP", "PIN", "3DS", "NONE"])
-otp_success_rate_customer = input_float("OTP Success Rate Customer", 0.7, 0.0, 1.0, 0.01)
-past_fraud_count_customer = input_int("Past Fraud Count Customer", 0, 0, 1000, 1)
-past_disputes_customer = input_int("Past Disputes Customer", 0, 0, 1000, 1)
-merchant_historical_fraud_rate = input_float("Merchant Historical Fraud Rate", 0.05, 0.0, 1.0, 0.001)
-hour_of_day = input_int("Hour of Day", 12, 0, 23, 1)
-day_of_week = input_int("Day of Week", 2, 0, 6, 1)
-is_weekend = st.sidebar.selectbox("Is Weekend", [0, 1], format_func=lambda x: "Yes" if x == 1 else "No")
+hour = st.slider("Hour of Transaction", 0, 23, 12)
 
-input_df = pd.DataFrame([{
-    "transactionid": transaction_id,
-    "customerid": customer_id,
-    "deviceid": device_id,
-    "merchantid": merchant_id,
-    "amount": amount,
-    "paymentmethod": payment_method,
-    "isinternational": is_international,
-    "merchantcategory": merchant_category,
-    "ipaddressriskscore": ip_address_risk_score,
-    "devicetrustscore": device_trust_score,
-    "txncountlast24h": txn_count_last_24h,
-    "avgamountlast24h": avg_amount_last_24h,
-    "merchantdiversitylast7d": merchant_diversity_last_7d,
-    "devicechangeflag": device_change_flag,
-    "locationchangeflag": location_change_flag,
-    "authenticationmethod": authentication_method,
-    "otpsuccessratecustomer": otp_success_rate_customer,
-    "pastfraudcountcustomer": past_fraud_count_customer,
-    "pastdisputescustomer": past_disputes_customer,
-    "merchanthistoricalfraudrate": merchant_historical_fraud_rate,
-    "hourofday": hour_of_day,
-    "dayofweek": day_of_week,
-    "isweekend": is_weekend
-}])
+ip_risk_score = st.slider(
+    "IP Risk Score",
+    0,
+    100,
+    20
+)
 
-st.subheader("Input Summary")
-st.dataframe(input_df, use_container_width=True)
+device_risk_score = st.slider(
+    "Device Risk Score",
+    0,
+    100,
+    20
+)
 
-if st.button("Predict Fraud Risk"):
-    try:
-        proba = pipeline.predict_proba(input_df)[:, 1][0]
-        threshold = metadata.get("threshold", 0.55)
-        prediction = int(proba >= threshold)
+average_amount = st.number_input(
+    "Customer Average Transaction Amount",
+    value=amount
+)
 
-        col1, col2, col3 = st.columns(3)
-        col1.metric("Fraud Probability", f"{proba:.4f}")
-        col2.metric("Threshold", f"{threshold:.2f}")
-        col3.metric("Prediction", "Fraud" if prediction == 1 else "Legitimate")
+# -----------------------
+# Feature Engineering
+# -----------------------
 
-        if prediction == 1:
-            st.error("High fraud risk detected.")
-        else:
-            st.success("Transaction appears legitimate.")
-    except Exception as e:
-        st.error(f"Prediction failed: {e}")
+amount_deviation_diff = amount - average_amount
 
-st.markdown("### Notes")
-st.write("The app uses the saved fraud pipeline and model metadata from the notebook.")
+amount_deviation_ratio = (
+    amount / average_amount
+    if average_amount != 0
+    else 1
+)
+
+ip_device_risk_interaction = (
+    ip_risk_score * device_risk_score
+)
+
+combined_change_flag = int(
+    device_change == "Yes"
+    and location_change == "Yes"
+)
+
+weekend_night_flag = int(
+    is_weekend == "Yes"
+    and (hour >= 22 or hour <= 5)
+)
+
+weak_auth_flag = int(
+    authentication_method in ["OTP", "Password"]
+)
+
+high_risk_payment_flag = int(
+    payment_method in ["Wallet", "UPI"]
+)
+
+combined_risk_index = (
+    ip_risk_score
+    + device_risk_score
+)
+
+# -----------------------
+# DataFrame
+# -----------------------
+
+input_df = pd.DataFrame({
+
+    "amount":[amount],
+
+    "paymentmethod":[payment_method],
+
+    "authenticationmethod":[authentication_method],
+
+    "devicechange":[device_change],
+
+    "locationchange":[location_change],
+
+    "hour":[hour],
+
+    "ipriskscore":[ip_risk_score],
+
+    "deviceriskscore":[device_risk_score],
+
+    "amount_deviation_diff":[amount_deviation_diff],
+
+    "amount_deviation_ratio":[amount_deviation_ratio],
+
+    "ip_device_risk_interaction":[ip_device_risk_interaction],
+
+    "combined_change_flag":[combined_change_flag],
+
+    "weekend_night_flag":[weekend_night_flag],
+
+    "weak_auth_flag":[weak_auth_flag],
+
+    "high_risk_payment_flag":[high_risk_payment_flag],
+
+    "combined_risk_index":[combined_risk_index]
+
+})
+
+# -----------------------
+# Prediction
+# -----------------------
+
+if st.button("Predict"):
+
+    pred = model.predict(input_df)[0]
+
+    prob = model.predict_proba(input_df)[0][1]
+
+    st.metric(
+        "Fraud Probability",
+        f"{prob*100:.2f}%"
+    )
+
+    if pred == 1:
+        st.error("🚨 Fraudulent Transaction")
+    else:
+        st.success("✅ Legitimate Transaction")
