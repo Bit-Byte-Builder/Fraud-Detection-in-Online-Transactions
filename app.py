@@ -7,8 +7,8 @@ from pathlib import Path
 st.set_page_config(page_title="Fraud Detection App", layout="wide")
 
 MODELS_DIR = Path("models")
-PIPELINE_PATH = MODELS_DIR / "fraudpipeline.pkl"
-METADATA_PATH = MODELS_DIR / "modelmetadata.pkl"
+PIPELINE_PATH = MODELS_DIR / "fraud_pipeline.pkl"
+METADATA_PATH = MODELS_DIR / "model_metadata.pkl"
 
 def load_artifacts():
     missing = []
