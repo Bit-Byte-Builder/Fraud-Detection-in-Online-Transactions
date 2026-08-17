@@ -19,7 +19,7 @@ An end-to-end machine learning system for detecting potentially fraudulent onlin
 - 📈 Interactive Streamlit Dashboard
 - 🧠 Advanced Feature Engineering
 
-- ## 🖼️ Application Preview
+## 🖼️ Application Preview
 
 ### 🏠 Home Screen
 
@@ -158,7 +158,7 @@ The project evaluates the model using:
 | Accuracy            |     0.80 |
 
 
-## 🎚️ After Threshold Tuning
+## 🎚️ Threshold Tuning
 
 The fraud decision threshold was tuned using F1 Score as the optimisation criterion.
 | Metric              | Score |
@@ -177,14 +177,14 @@ A lower threshold may identify more potentially fraudulent transactions but can 
 
 The appropriate threshold should therefore depend on the relative business costs of false positives and false negatives.
 
-Note: The reported metrics are based on the evaluation setup documented in the project notebook and should be interpreted in the context of the dataset and validation methodology. They should not be considered production-level fraud-detection performance.
+> **Note:** The reported metrics are based on the evaluation setup documented in the project notebook and should be interpreted in the context of the dataset and validation methodology. They should not be considered production-level fraud-detection performance.
 
 
 ## 🖥️ Streamlit Application
 
 The trained model is integrated into an interactive Streamlit application.
 
-Application Capabilities
+### Application Capabilities
 - Real-time transaction fraud prediction
 - Fraud probability score
 - Risk-level assessment
@@ -245,28 +245,28 @@ Fraud-Detection-in-Online-Transactions/
 ```
 
 ## 🛠️ Tech Stack
- 
+
 ### Programming Language
-Python
+- Python
 
 ### Data Analysis
-Pandas
-NumPy
+- Pandas
+- NumPy
 
 ### Data Visualization
-Matplotlib
-Seaborn
+- Matplotlib
+- Seaborn
 
 ### Machine Learning
-Scikit-learn
-XGBoost
-Imbalanced-learn
+- Scikit-learn
+- XGBoost
+- Imbalanced-learn
 
-## Model Management
-Joblib
+### Model Management
+- Joblib
 
 ### Application & Deployment
-Streamlit
+- Streamlit
 
 ## 📦 Requirements
 
@@ -281,7 +281,7 @@ The project requires the following Python packages:
 - joblib
 - streamlit
   
-  All dependencies are also listed in requirements.txt.
+All dependencies are also listed in `requirements.txt`.
 
 ## 🔮 Future Improvements
 
