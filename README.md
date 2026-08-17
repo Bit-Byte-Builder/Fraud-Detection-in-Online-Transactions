@@ -228,15 +228,14 @@ Contains supporting model metadata required by the application.
 Fraud-Detection-in-Online-Transactions/
 │
 ├── app.py
+├── Fraud_Detection_Capstone_Project.ipynb
 ├── README.md
 ├── requirements.txt
+├── LICENSE
 │
 ├── models/
 │   ├── fraudpipeline.pkl
 │   └── modelmetadata.pkl
-│
-├── notebooks/
-│   └── Fraud_Detection_Capstone_Project-1.ipynb
 │
 └── screenshots/
     ├── 01_Home_Page.png
@@ -282,6 +281,18 @@ The project requires the following Python packages:
 - streamlit
   
 All dependencies are also listed in `requirements.txt`.
+
+## ⚙️ Installation & Setup
+
+### 1. Clone the Repository
+git clone https://github.com/Bit-Byte-Builder/Fraud-Detection-in-Online-Transactions.git
+cd Fraud-Detection-in-Online-Transactions
+
+### 2. Install Dependencies
+pip install -r requirements.txt
+
+### 3. Run the Streamlit Application
+streamlit run app.py
 
 ## 🔮 Future Improvements
 
