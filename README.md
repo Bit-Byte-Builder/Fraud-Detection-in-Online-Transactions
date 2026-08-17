@@ -81,7 +81,7 @@ Therefore, the objective is to develop a machine learning solution that can iden
 
 ## 📊 Dataset
 
-The dataset contains 50,000 online transactions with features such as amount, payment method, international flag, merchant category, device trust score, IP risk score, OTP success rate, fraud history, disputes, and time-based patterns. The final target variable is 'isfraud'.
+The dataset contains 50,000 online transactions with features such as amount, payment method, international flag, merchant category, device trust score, IP risk score, OTP success rate, fraud history, disputes, and time-based patterns. The final target variable is `isfraud`.
 
 
 ## 🔍 Data Validation
