@@ -214,10 +214,12 @@ models/
 ├── fraudpipeline.pkl
 └── modelmetadata.pkl
 ```
-fraudpipeline.pkl
+### `fraudpipeline.pkl`
+
 Contains the trained fraud-detection pipeline/model used by the Streamlit application.
 
-modelmetadata.pkl
+### `modelmetadata.pkl`
+
 Contains supporting model metadata required by the application.
 
 ## 🏗️ Project Structure
