@@ -345,7 +345,7 @@ This project demonstrates an end-to-end machine learning approach to online tran
 
 The project also highlights the importance of balancing fraud detection with false-positive costs when designing a practical fraud-risk system.
 
-The trained model and supporting metadata are saved in the 'models/' directory for use by the Streamlit application.
+The trained model and supporting metadata are saved in the `models/` directory for use by the Streamlit application.
 
 ## 👨‍💻 Author
 **Sachin Kumar**
