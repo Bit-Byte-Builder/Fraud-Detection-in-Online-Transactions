@@ -243,26 +243,26 @@ Fraud-Detection-in-Online-Transactions/
 
  ## 🛠️ Tech Stack
  
-# Programming Language
+## Programming Language
 Python
 
-# Data Analysis
+## Data Analysis
 Pandas
 NumPy
 
-# Data Visualization
+## Data Visualization
 Matplotlib
 Seaborn
 
-# Machine Learning
+## Machine Learning
 Scikit-learn
 XGBoost
 Imbalanced-learn
 
-# Model Management
+## Model Management
 Joblib
 
-# Application & Deployment
+## Application & Deployment
 Streamlit
 
 ## 📦 Requirements
