@@ -196,6 +196,7 @@ The application allows users to provide transaction information and receive a mo
 
 ## 💡 Business Insights
 The analysis identified several patterns associated with increased fraud risk:
+
 - Device changes can be important fraud indicators.
 - Location changes can indicate potentially suspicious behaviour.
 - International transactions show a higher fraud rate than domestic transactions.
@@ -285,14 +286,23 @@ All dependencies are also listed in `requirements.txt`.
 ## ⚙️ Installation & Setup
 
 ### 1. Clone the Repository
+
+```bash
 git clone https://github.com/Bit-Byte-Builder/Fraud-Detection-in-Online-Transactions.git
 cd Fraud-Detection-in-Online-Transactions
+```
 
 ### 2. Install Dependencies
+
+```bash
 pip install -r requirements.txt
+```
 
 ### 3. Run the Streamlit Application
+
+```bash
 streamlit run app.py
+```
 
 ## 🔮 Future Improvements
 
