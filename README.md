@@ -338,8 +338,13 @@ This project provided practical experience with:
 - Streamlit deployment
 - Translating machine learning predictions into business recommendations
 
-## Conclusion
-This project demonstrates a complete fraud detection pipeline for online transactions, from validation and feature engineering to model evaluation and deployment. The final model and metadata are saved in the 'models/' folder for Streamlit use and future scoring.
+## 📌 Conclusion
+
+This project demonstrates an end-to-end machine learning approach to online transaction fraud detection, covering data validation, exploratory data analysis, feature engineering, model training, evaluation, threshold tuning, and Streamlit deployment.
+
+The project also highlights the importance of balancing fraud detection with false-positive costs when designing a practical fraud-risk system.
+
+The trained model and supporting metadata are saved in the `models/` directory for use by the Streamlit application.
 
 ## 👨‍💻 Author
 **Sachin Kumar**
