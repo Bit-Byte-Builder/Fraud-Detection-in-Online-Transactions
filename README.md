@@ -209,10 +209,11 @@ The analysis identified several patterns associated with increased fraud risk:
 
 The final deployed model and supporting metadata are stored in the models/ directory.
 
+```text
 models/
 ├── fraudpipeline.pkl
 └── modelmetadata.pkl
-
+```
 fraudpipeline.pkl
 Contains the trained fraud-detection pipeline/model used by the Streamlit application.
 
@@ -221,6 +222,7 @@ Contains supporting model metadata required by the application.
 
 ## 🏗️ Project Structure
 
+```text
 Fraud-Detection-in-Online-Transactions/
 │
 ├── app.py
@@ -238,6 +240,7 @@ Fraud-Detection-in-Online-Transactions/
     ├── 01_Home_Page.png
     ├── 03_Prediction_Result_Low_Risk.png
     └── 04_Approved_Transaction_Recommendation_Engineered_Features.png
+```
 
 ## 🛠️ Tech Stack
  
