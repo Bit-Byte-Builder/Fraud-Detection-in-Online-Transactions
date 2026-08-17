@@ -199,7 +199,7 @@ The analysis identified several patterns associated with increased fraud risk:
 
 - Device changes can be important fraud indicators.
 - Location changes can indicate potentially suspicious behaviour.
-- International transactions show a higher fraud rate than domestic transactions.
+- International transactions show a higher fraud rate than domestic transactions in the analysed dataset.
 - Fraud risk increases when risky behavior combines with weak authentication.
 - Behavioural and interaction-based features can provide additional predictive information beyond basic transaction attributes.
 - Threshold tuning is useful when balancing fraud capture against false positives.
