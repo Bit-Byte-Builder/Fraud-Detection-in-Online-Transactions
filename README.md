@@ -34,8 +34,6 @@ An end-to-end machine learning system for detecting potentially fraudulent onlin
 ![Recommended Action](screenshots/04_Approved_Transaction_Recommendation_Engineered_Features.png)
 
 
-# Fraud Detection in Online Transactions
-
 ## 📌 Project Overview
 
 This project builds an end-to-end machine learning pipeline to detect fraudulent online transactions.
@@ -116,11 +114,11 @@ These engineered features help capture behavioral anomalies and risk patterns mo
 
 The notebook compares multiple classification models, including:
 
-# Logistic Regression
+### Logistic Regression
 
 Used as a benchmark model to establish a baseline for comparison.
 
-# Random Forest
+### Random Forest
 
 Used as the primary model for deeper evaluation and deployment.
 
@@ -140,12 +138,12 @@ Because fraud detection is an imbalanced classification problem, accuracy alone 
 
 The project evaluates the model using:
 
-> ROC-AUC
-> PR-AUC
-> Precision
-> Recall
-> F1 Score
-> Accuracy
+- ROC-AUC
+- PR-AUC
+- Precision
+- Recall
+- F1 Score
+- Accuracy
 
 ## 📊 Model Performance
 
@@ -187,12 +185,12 @@ Note: The reported metrics are based on the evaluation setup documented in the p
 The trained model is integrated into an interactive Streamlit application.
 
 Application Capabilities
-Real-time transaction fraud prediction
-Fraud probability score
-Risk-level assessment
-Transaction risk classification
-Business action recommendation
-Interactive prediction dashboard
+- Real-time transaction fraud prediction
+- Fraud probability score
+- Risk-level assessment
+- Transaction risk classification
+- Business action recommendation
+- Interactive prediction dashboard
 
 The application allows users to provide transaction information and receive a model-generated fraud-risk assessment.
 
@@ -205,7 +203,7 @@ The analysis identified several patterns associated with increased fraud risk:
 - Behavioural and interaction-based features can provide additional predictive information beyond basic transaction attributes.
 - Threshold tuning is useful when balancing fraud capture against false positives.
 
-  Important: These observations are specific to the analysed dataset and should be validated against production data before being used as operational fraud rules.
+> **Important:** These observations are specific to the analysed dataset and should be validated against production data before being used as operational fraud rules.
 
 ## 💾 Saved Artifacts
 
@@ -241,20 +239,20 @@ Fraud-Detection-in-Online-Transactions/
     ├── 03_Prediction_Result_Low_Risk.png
     └── 04_Approved_Transaction_Recommendation_Engineered_Features.png
 
- ## 🛠️ Tech Stack
+## 🛠️ Tech Stack
  
-## Programming Language
+### Programming Language
 Python
 
-## Data Analysis
+### Data Analysis
 Pandas
 NumPy
 
-## Data Visualization
+### Data Visualization
 Matplotlib
 Seaborn
 
-## Machine Learning
+### Machine Learning
 Scikit-learn
 XGBoost
 Imbalanced-learn
@@ -262,7 +260,7 @@ Imbalanced-learn
 ## Model Management
 Joblib
 
-## Application & Deployment
+### Application & Deployment
 Streamlit
 
 ## 📦 Requirements
@@ -284,7 +282,7 @@ The project requires the following Python packages:
 
 Potential improvements to the project include:
 
-Hyperparameter optimisation for Random Forest and XGBoost.
+- Hyperparameter optimisation for Random Forest and XGBoost.
 - Cross-validation for more robust performance estimation.
 - Temporal validation to better simulate real-world fraud detection.
 - Probability calibration.
@@ -294,7 +292,7 @@ Hyperparameter optimisation for Random Forest and XGBoost.
 - Real-time transaction monitoring.
 - Data-drift monitoring.
 - Model-performance monitoring.
--Integration with a production database or transaction API.
+- Integration with a production database or transaction API.
 - Automated retraining pipelines.
 
 ## ⚠️ Limitations
@@ -344,7 +342,7 @@ This project demonstrates an end-to-end machine learning approach to online tran
 
 The project also highlights the importance of balancing fraud detection with false-positive costs when designing a practical fraud-risk system.
 
-The trained model and supporting metadata are saved in the `models/` directory for use by the Streamlit application.
+The trained model and supporting metadata are saved in the 'models/' directory for use by the Streamlit application.
 
 ## 👨‍💻 Author
 **Sachin Kumar**
