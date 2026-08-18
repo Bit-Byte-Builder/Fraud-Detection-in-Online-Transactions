@@ -239,8 +239,11 @@ Fraud-Detection-in-Online-Transactions/
 │
 └── screenshots/
     ├── 01_Home_Page.png
-    ├── 03_Prediction_Result_Low_Risk.png
-    └── 04_Approved_Transaction_Recommendation_Engineered_Features.png
+    ├── 02_Prediction_Result_Low_Risk.png
+    ├── 03_Approved_Transaction_Recommendation & Engineered_Featured_Output.png
+    ├── 04_Model_Architecture_Info.png
+    ├── 05_Transaction_Input_Form.png
+    └── 06_Advanced_Parameters_Panel.png
 ```
 
 ## 🛠️ Tech Stack
