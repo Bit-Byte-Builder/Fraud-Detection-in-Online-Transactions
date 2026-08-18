@@ -22,7 +22,7 @@ An end-to-end machine learning system for detecting potentially fraudulent onlin
 
 ### ✅ Recommended Action & Engineered Features
 
-![Recommended Action & Engineered Features](screenshots/03_Approved_Transaction_Recommendation_Engineered_Features.png)
+![Recommended Action & Engineered Features](screenshots/03_Approved_Transaction_Recommendation%20%26%20Engineered_Featured_Output.png)
 
 ### 🧠 Model Architecture
 
