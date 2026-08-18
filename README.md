@@ -234,8 +234,8 @@ Fraud-Detection-in-Online-Transactions/
 ├── LICENSE
 │
 ├── models/
-│   ├── fraudpipeline.pkl
-│   └── modelmetadata.pkl
+│   ├── fraud_pipeline.pkl
+│   └── model_metadata.pkl
 │
 └── screenshots/
     ├── 01_Home_Page.png
