@@ -211,14 +211,14 @@ The final deployed model and supporting metadata are stored in the models/ direc
 
 ```text
 models/
-├── fraudpipeline.pkl
-└── modelmetadata.pkl
+├── fraud_pipeline.pkl
+└── model_metadata.pkl
 ```
-### `fraudpipeline.pkl`
+### `fraud_pipeline.pkl`
 
 Contains the trained fraud-detection pipeline/model used by the Streamlit application.
 
-### `modelmetadata.pkl`
+### `model_metadata.pkl`
 
 Contains supporting model metadata required by the application.
 
