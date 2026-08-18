@@ -24,17 +24,10 @@ An end-to-end machine learning system for detecting potentially fraudulent onlin
 
 ![Recommended Action & Engineered Features](screenshots/03_Approved_Transaction_Recommendation%20%26%20Engineered_Featured_Output.png)
 
-### 🧠 Model Architecture
-
-![Model Architecture](screenshots/04_Model_Architecture_Info.png)
-
 ### 📝 Transaction Input Form
 
 ![Transaction Input Form](screenshots/05_Transaction_Input_Form.png)
 
-### ⚙️ Advanced Parameters
-
-![Advanced Parameters](screenshots/06_Advanced_Parameters_Panel.png)
 
 ## 📌 Project Overview
 
