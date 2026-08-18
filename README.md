@@ -9,15 +9,6 @@ An end-to-end machine learning system for detecting potentially fraudulent onlin
 
 ---
 
-### ✨ Key Features
-
-- 🔍 Real-time Fraud Prediction
-- 🤖 Machine Learning Powered (Random Forest)
-- 📊 Fraud Probability Score
-- ⚠️ Risk Level Assessment
-- ✅ Business Action Recommendation
-- 📈 Interactive Streamlit Dashboard
-- 🧠 Advanced Feature Engineering
 
 ## 🖼️ Application Preview
 
@@ -36,19 +27,21 @@ An end-to-end machine learning system for detecting potentially fraudulent onlin
 
 ## 📌 Project Overview
 
-This project builds an end-to-end machine learning pipeline to detect fraudulent online transactions.
+Online payment systems need to identify fraudulent transactions while minimising false alerts that can create unnecessary customer friction.
+
+This project builds an end-to-end machine learning pipeline to detect potentially fraudulent online transactions and translate model predictions into practical fraud-risk decisions.
 
 The workflow covers:
 
 **Data Validation → Exploratory Data Analysis (EDA) → Feature Engineering → Preprocessing → Model Training → Model Evaluation → Threshold Tuning → Business Recommendations → Deployment**
 
-The project focuses not only on predicting fraudulent transactions, but also on translating model predictions into practical fraud-risk decisions.
+The project combines transaction and behavioural features with machine learning to identify potentially fraudulent transactions while maintaining a practical balance between fraud detection and false alerts.
 
 ---
 
-## 💼 Business Problem
+## 💼 Business Scenario
 
-PaySphere Digital Payments Pvt. Ltd. processes millions of transactions across UPI, cards, net banking, and digital wallets.
+**PaySphere Digital Payments Pvt. Ltd.** is a fictional digital-payments company that processes millions of transactions across UPI, cards, net banking, and digital wallets.
 
 As transaction volumes increase, the fraud detection team needs to identify suspicious transactions while minimising unnecessary disruption to legitimate customers.
 
@@ -173,9 +166,9 @@ The tuned threshold slightly improves precision and accuracy while reducing reca
 
 This demonstrates the precision-recall trade-off involved in fraud detection.
 
-A lower threshold may identify more potentially fraudulent transactions but can also increase false positives. A higher threshold may reduce false alerts but can allow more fraudulent transactions to pass undetected.
+In general, lowering the classification threshold can increase the number of transactions flagged as potentially fraudulent, which may improve recall but can also increase false positives. Raising the threshold can reduce false alerts but may allow more fraudulent transactions to pass undetected.
 
-The appropriate threshold should therefore depend on the relative business costs of false positives and false negatives.
+In this project, the threshold of **0.55 was selected based on F1-score optimisation.** In a production fraud-detection system, the appropriate threshold should also consider the relative business costs of false positives and false negatives.
 
 > **Note:** The reported metrics are based on the evaluation setup documented in the project notebook and should be interpreted in the context of the dataset and validation methodology. They should not be considered production-level fraud-detection performance.
 
@@ -184,13 +177,15 @@ The appropriate threshold should therefore depend on the relative business costs
 
 The trained model is integrated into an interactive Streamlit application.
 
-### Application Capabilities
-- Real-time transaction fraud prediction
-- Fraud probability score
-- Risk-level assessment
-- Transaction risk classification
-- Business action recommendation
-- Interactive prediction dashboard
+### ✨ Key Features
+
+- 🔍 Real-time Fraud Prediction
+- 🤖 Machine Learning Powered (Random Forest)
+- 📊 Fraud Probability Score
+- ⚠️ Risk Level Assessment
+- ✅ Business Action Recommendation
+- 📈 Interactive Streamlit Dashboard
+- 🧠 Advanced Feature Engineering
 
 The application allows users to provide transaction information and receive a model-generated fraud-risk assessment.
 
