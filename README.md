@@ -16,6 +16,10 @@ An end-to-end machine learning system for detecting potentially fraudulent onlin
 
 ![Home Screen](screenshots/01_Home_Page.png)
 
+### 📝 Transaction Input Form
+
+![Transaction Input Form](screenshots/05_Transaction_Input_Form.png)
+
 ### 📊 Prediction Dashboard
 
 ![Prediction Dashboard](screenshots/02_Prediction_Result_Low_Risk.png)
@@ -23,10 +27,6 @@ An end-to-end machine learning system for detecting potentially fraudulent onlin
 ### ✅ Recommended Action & Engineered Features
 
 ![Recommended Action & Engineered Features](screenshots/03_Approved_Transaction_Recommendation%20%26%20Engineered_Featured_Output.png)
-
-### 📝 Transaction Input Form
-
-![Transaction Input Form](screenshots/05_Transaction_Input_Form.png)
 
 
 ## 📌 Project Overview
