@@ -172,7 +172,7 @@ This demonstrates the precision-recall trade-off involved in fraud detection.
 
 In general, lowering the classification threshold can increase the number of transactions flagged as potentially fraudulent, which may improve recall but can also increase false positives. Raising the threshold can reduce false alerts but may allow more fraudulent transactions to pass undetected.
 
-In this project, the threshold of **0.55 was selected based on F1-score optimisation.** In a production fraud-detection system, the appropriate threshold should also consider the relative business costs of false positives and false negatives.
+In this project, the threshold of **0.61 was selected based on F1-score optimisation.** In a production fraud-detection system, the appropriate threshold should also consider the relative business costs of false positives and false negatives.
 
 > **Note:** The reported metrics are based on the evaluation setup documented in the project notebook and should be interpreted in the context of the dataset and validation methodology. They should not be considered production-level fraud-detection performance.
 
