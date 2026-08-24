@@ -2,6 +2,15 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import joblib
+import logging
+
+# -----------------------------
+# 📝 LOGGING SETUP
+# -----------------------------
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+)
 
 # -----------------------------
 # Page Configuration
@@ -22,6 +31,20 @@ def load_model():
 model = load_model()
 
 # -----------------------------
+# Load Model Metadata (includes tuned threshold)
+# -----------------------------
+@st.cache_resource
+def load_metadata():
+    return joblib.load("models/model_metadata.pkl")
+
+metadata = load_metadata()
+
+# Use the tuned threshold from model_metadata.pkl
+# README says 0.55; metadata says 0.61 — using metadata as the source of truth.
+# If you want to change it, update model_metadata.pkl during training, not here.
+TUNED_THRESHOLD = metadata.get("threshold", 0.55)
+
+# -----------------------------
 # App Title
 # -----------------------------
 st.title("💳 AI-Powered Financial Fraud Detection System")
@@ -29,6 +52,7 @@ st.title("💳 AI-Powered Financial Fraud Detection System")
 st.markdown("""
 This application predicts whether a financial transaction is **Fraudulent** or **Legitimate**
 using a Machine Learning model trained on historical transaction data.
+
 """)
 
 st.divider()
@@ -81,16 +105,12 @@ isinternational = st.sidebar.selectbox(
 
 hourofday = st.sidebar.slider(
     "Hour of Transaction",
-    0,
-    23,
-    12
+    0, 23, 12
 )
 
 dayofweek = st.sidebar.slider(
     "Day of Week",
-    0,
-    6,
-    2
+    0, 6, 2
 )
 
 isweekend = 1 if dayofweek in [5,6] else 0
@@ -118,16 +138,12 @@ with st.sidebar.expander("Advanced Parameters"):
 
     ipaddressriskscore = st.slider(
         "IP Address Risk Score",
-        0.0,
-        1.0,
-        0.20
+        0.0, 1.0, 0.20
     )
 
     devicetrustscore = st.slider(
         "Device Trust Score",
-        0.0,
-        1.0,
-        0.90
+        0.0, 1.0, 0.90
     )
 
     txncountlast24h = st.number_input(
@@ -157,9 +173,7 @@ with st.sidebar.expander("Advanced Parameters"):
 
     otpsuccessratecustomer = st.slider(
         "OTP Success Rate",
-        0.0,
-        1.0,
-        0.95
+        0.0, 1.0, 0.95
     )
 
     pastfraudcountcustomer = st.number_input(
@@ -174,9 +188,7 @@ with st.sidebar.expander("Advanced Parameters"):
 
     merchanthistoricalfraudrate = st.slider(
         "Merchant Historical Fraud Rate",
-        0.0,
-        1.0,
-        0.05
+        0.0, 1.0, 0.05
     )
 
 # ============================================================
@@ -208,10 +220,25 @@ high_risk_payment_flag = int(
     and isinternational == 1
 )
 
+# ------------------------------------------------------------
+# Combined Risk Index (normalized)
+# ------------------------------------------------------------
+# Previously this averaged raw values on different scales:
+#   - ipaddressriskscore: 0.0–1.0
+#   - merchanthistoricalfraudrate: 0.0–1.0
+#   - pastfraudcountcustomer: 0, 1, 2, ... (unbounded integer!)
+#   - devicechangeflag: 0 or 1
+#   - locationchangeflag: 0 or 1
+#
+# The unbounded fraud count dominated the average. Now we cap
+# it at 5 (anything ≥5 is treated as maximum risk = 1.0) so
+# every component is on the same 0.0–1.0 scale.
+normalized_fraud_count = min(pastfraudcountcustomer / 5.0, 1.0)
+
 combined_risk_index = np.mean([
     ipaddressriskscore,
     merchanthistoricalfraudrate,
-    pastfraudcountcustomer,
+    normalized_fraud_count,
     devicechangeflag,
     locationchangeflag
 ])
@@ -293,80 +320,87 @@ with st.expander("Preview Model Input"):
 
 if st.button("🔍 Predict Fraud", use_container_width=True):
 
-    # Make prediction
-    prediction = model.predict(input_df)[0]
+    try:
+        # Get prediction probabilities
+        proba = model.predict_proba(input_df)[0]
 
-    # Get prediction probabilities
-    proba = model.predict_proba(input_df)[0]
-
-    # Probability of Fraud class
-    if 1 in model.classes_:
-        fraud_index = list(model.classes_).index(1)
-        probability = proba[fraud_index]
-    else:
-        probability = proba[0]
-
-    st.divider()
-
-    st.header("Prediction Result")
-
-    col1, col2, col3 = st.columns(3)
-
-    with col1:
-        if prediction == 1:
-            st.error("🚨 Fraudulent Transaction")
+        # Probability of Fraud class
+        if 1 in model.classes_:
+            fraud_index = list(model.classes_).index(1)
+            probability = proba[fraud_index]
         else:
-            st.success("✅ Genuine Transaction")
+            probability = proba[0]
 
-    with col2:
-        st.metric(
-            "Fraud Probability",
-            f"{probability:.2%}"
-        )
+        # ----------------------------------------------------
+        # Use the TUNED threshold instead of the default 0.5
+        # ----------------------------------------------------
+        # Previously this called model.predict() which uses 0.5,
+        # ignoring the threshold-tuning work documented in the README.
+        # Now we apply the tuned threshold from model_metadata.pkl.
+        prediction = 1 if probability >= TUNED_THRESHOLD else 0
 
-    with col3:
-        st.metric(
-            "Model Confidence",
-            f"{max(probability, 1 - probability):.2%}"
-        )
-    # ------------------------------------------
-    # Risk Level
-    # ------------------------------------------
+        st.divider()
 
-    if probability < 0.30:
-        risk = "🟢 LOW"
+        st.header("Prediction Result")
 
-    elif probability < 0.60:
-        risk = "🟡 MEDIUM"
+        col1, col2, col3 = st.columns(3)
 
-    elif probability < 0.85:
-        risk = "🟠 HIGH"
+        with col1:
+            if prediction == 1:
+                st.error("🚨 Fraudulent Transaction")
+            else:
+                st.success("✅ Genuine Transaction")
 
-    else:
-        risk = "🔴 VERY HIGH"
+        with col2:
+            st.metric(
+                "Fraud Probability",
+                f"{probability:.2%}"
+            )
 
-    st.subheader("Risk Level")
-    st.info(risk)
+        with col3:
+            st.metric(
+                "Model Confidence",
+                f"{max(probability, 1 - probability):.2%}"
+            )
+        # ------------------------------------------
+        # Risk Level
+        # ------------------------------------------
 
-    # ------------------------------------------
-    # Probability Bar
-    # ------------------------------------------
+        if probability < 0.30:
+            risk = "🟢 LOW"
 
-    st.subheader("Fraud Probability")
+        elif probability < 0.60:
+            risk = "🟡 MEDIUM"
 
-    st.progress(float(probability))
+        elif probability < 0.85:
+            risk = "🟠 HIGH"
 
-    st.write(f"Probability = **{probability:.2%}**")
+        else:
+            risk = "🔴 VERY HIGH"
 
-    # ------------------------------------------
-    # Business Recommendation
-    # ------------------------------------------
+        st.subheader("Risk Level")
+        st.info(risk)
 
-    st.subheader("Recommended Action")
+        # ------------------------------------------
+        # Probability Bar
+        # ------------------------------------------
 
-    if probability < 0.30:
+        st.subheader("Fraud Probability")
 
-        st.success("""
+        st.progress(float(probability))
+
+        st.write(f"Probability = **{probability:.2%}**")
+        st.caption(f"Classification threshold: {TUNED_THRESHOLD:.2f} (tuned via F1 optimization)")
+
+        # ------------------------------------------
+        # Business Recommendation
+        # ------------------------------------------
+
+        st.subheader("Recommended Action")
+
+        if probability < 0.30:
+
+            st.success("""
 ✅ APPROVE TRANSACTION
 
 Transaction appears legitimate.
@@ -374,9 +408,9 @@ Transaction appears legitimate.
 No further verification required.
 """)
 
-    elif probability < 0.60:
+        elif probability < 0.60:
 
-        st.warning("""
+            st.warning("""
 ⚠ REVIEW TRANSACTION
 
 Ask customer for OTP verification.
@@ -384,9 +418,9 @@ Ask customer for OTP verification.
 Continue monitoring.
 """)
 
-    elif probability < 0.85:
+        elif probability < 0.85:
 
-        st.warning("""
+            st.warning("""
 🟠 HIGH RISK
 
 Perform manual verification.
@@ -394,9 +428,9 @@ Perform manual verification.
 Temporary hold recommended.
 """)
 
-    else:
+        else:
 
-        st.error("""
+            st.error("""
 🚫 BLOCK TRANSACTION
 
 Very high fraud probability.
@@ -404,42 +438,46 @@ Very high fraud probability.
 Escalate to fraud investigation team.
 """)
 
-    # ------------------------------------------
-    # Display Engineered Features
-    # ------------------------------------------
+        # ------------------------------------------
+        # Display Engineered Features
+        # ------------------------------------------
 
-    with st.expander("Engineered Features"):
+        with st.expander("Engineered Features"):
 
-        engineered = pd.DataFrame({
+            engineered = pd.DataFrame({
 
-            "Feature":[
-                "Amount Deviation Ratio",
-                "Amount Deviation Difference",
-                "IP × Device Risk",
-                "Combined Change Flag",
-                "Weekend Night Flag",
-                "Weak Authentication",
-                "High Risk Payment",
-                "Combined Risk Index"
-            ],
+                "Feature":[
+                    "Amount Deviation Ratio",
+                    "Amount Deviation Difference",
+                    "IP × Device Risk",
+                    "Combined Change Flag",
+                    "Weekend Night Flag",
+                    "Weak Authentication",
+                    "High Risk Payment",
+                    "Combined Risk Index"
+                ],
 
-            "Value":[
-                amount_deviation_ratio,
-                amount_deviation_diff,
-                ip_device_risk_interaction,
-                combined_change_flag,
-                weekend_night_flag,
-                weak_auth_flag,
-                high_risk_payment_flag,
-                combined_risk_index
-            ]
+                "Value":[
+                    amount_deviation_ratio,
+                    amount_deviation_diff,
+                    ip_device_risk_interaction,
+                    combined_change_flag,
+                    weekend_night_flag,
+                    weak_auth_flag,
+                    high_risk_payment_flag,
+                    combined_risk_index
+                ]
 
-        })
+            })
 
-        st.dataframe(
-            engineered,
-            use_container_width=True
-        )
+            st.dataframe(
+                engineered,
+                use_container_width=True
+            )
+
+    except Exception as e:
+        logging.error(f"Prediction failed: {e}")
+        st.error(f"Error: {str(e)}")
 
 # ============================================================
 # DOWNLOAD INPUT DATA
@@ -483,7 +521,7 @@ with st.expander("About This Model"):
 - Weekend Night Flag
 - Weak Authentication Flag
 - High-Risk Payment Flag
-- Combined Risk Index
+- Combined Risk Index (normalized)
 
 **Preprocessing**
 - One-Hot Encoding
@@ -493,6 +531,10 @@ with st.expander("About This Model"):
 **Prediction**
 - Fraud (1)
 - Genuine (0)
+
+**Classification Threshold**
+- Tuned via F1-score optimization
+- Loaded from `models/model_metadata.pkl`
 """)
 
 # ============================================================
@@ -503,5 +545,6 @@ st.divider()
 
 st.caption(
     "Developed by Sachin Kumar | "
-    "AI-Powered Financial Fraud Detection Capstone Project"
+    "Data science enthusiast"
 )
+
